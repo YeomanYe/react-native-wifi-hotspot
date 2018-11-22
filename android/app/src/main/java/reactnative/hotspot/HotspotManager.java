@@ -14,6 +14,7 @@ import reactnative.hotspot.hotspotmanager.WifiApManager;
 public class HotspotManager {
     private WifiApManager wifi;
     private peersList callback;
+    static WifiConfiguration config;
 
     interface peersList {
         void onPeersScanned(ArrayList<ClientScanResult> peers);
@@ -28,48 +29,50 @@ public class HotspotManager {
     }
 
     public boolean isEnabled() {
-        if(!wifi.isWifiApEnabled()) {
+        if (!wifi.isWifiApEnabled()) {
             wifi.setWifiApEnabled(null, true);
             return true;
         } else {
             return false;
         }
     }
+
     public boolean isDisabled() {
-        if(wifi.isWifiApEnabled()) {
-            wifi.setWifiApEnabled(null, false);
+        if (wifi.isWifiApEnabled()) {
+            wifi.setWifiApEnabled(config, false);
             return true;
         } else {
             return false;
         }
     }
+
     public boolean isCreated(ReadableMap info) {
-        if(wifi.isWifiApEnabled()) {
-            WifiConfiguration config = new WifiConfiguration();
-            if( info.hasKey("SSID") && info.hasKey("password")) {
+        if (wifi.isWifiApEnabled()) {
+            config = new WifiConfiguration();
+            if (info.hasKey("SSID") && info.hasKey("password")) {
                 config.SSID = info.getString("SSID");
                 config.preSharedKey = info.getString("password");
                 config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
                 config.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
                 config.allowedKeyManagement.set(4);
                 config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
-                if(info.hasKey("protocols")) {
-                    switch(info.getInt("protocols")) {
+                if (info.hasKey("protocols")) {
+                    switch (info.getInt("protocols")) {
                         case HotspotModule.protocols.WPA:
                             config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
                             break;
                         case HotspotModule.protocols.RSN:
                             config.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
                             break;
-                        default:
-                        {
+                        default: {
                             config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
                             config.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
                         }
                         break;
                     }
-                } if(info.hasKey("securityType")) {
-                    switch(info.getInt("securityType")) {
+                }
+                if (info.hasKey("securityType")) {
+                    switch (info.getInt("securityType")) {
                         case HotspotModule.security.IEEE8021X:
                             config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.IEEE8021X);
                             break;
@@ -83,8 +86,9 @@ public class HotspotManager {
                             config.allowedKeyManagement.set(4);
                             break;
                     }
-                } if(info.hasKey("authAlgorithm")) {
-                    switch(info.getInt("authAlgorithm")) {
+                }
+                if (info.hasKey("authAlgorithm")) {
+                    switch (info.getInt("authAlgorithm")) {
                         case HotspotModule.authAlgorithm.LEAP:
                             config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.LEAP);
                             break;
@@ -96,10 +100,12 @@ public class HotspotManager {
                             break;
                     }
                 }
-                if(wifi.setWifiApConfiguration(config))
-                    return true;
-                else
-                    return false;
+                config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+                config.allowedPairwiseCiphers
+                        .set(WifiConfiguration.PairwiseCipher.CCMP);
+                config.status = WifiConfiguration.Status.ENABLED;
+                if (wifi.setWifiApConfiguration(config)) return true;
+                else return false;
             } else {
                 return false;
             }
@@ -108,15 +114,17 @@ public class HotspotManager {
             return false;
         }
     }
+
     public WifiConfiguration getConfig() {
-        if(wifi.isWifiApEnabled()) {
+        if (wifi.isWifiApEnabled()) {
             return wifi.getWifiApConfiguration();
         } else {
             return null;
         }
     }
+
     private void peersList() {
-        if(wifi.isWifiApEnabled()) {
+        if (wifi.isWifiApEnabled()) {
             wifi.getClientList(true, new FinishScanListener() {
                 @Override
                 public void onFinishScan(ArrayList<ClientScanResult> clients) {
@@ -125,6 +133,7 @@ public class HotspotManager {
             });
         }
     }
+
     public void setPeersCallback(peersList callback) {
         this.callback = callback;
         peersList();
