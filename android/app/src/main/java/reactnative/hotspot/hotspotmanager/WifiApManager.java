@@ -34,12 +34,12 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 
 public class WifiApManager {
-    private final WifiManager mWifiManager;
+    private final WifiManager wifiManager;
     private Context context;
 
     public WifiApManager(Context context) {
         this.context = context;
-        mWifiManager = (WifiManager) this.context.getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) this.context.getSystemService(Context.WIFI_SERVICE);
     }
 
     /**
@@ -64,17 +64,18 @@ public class WifiApManager {
      * Note that starting in access point mode disables station
      * mode operation
      *
-     * @param wifiConfig SSID, security and channel details as part of WifiConfiguration
      * @return {@code true} if the operation succeeds, {@code false} otherwise
      */
-    public boolean setWifiApEnabled(WifiConfiguration wifiConfig, boolean enabled) {
+    public boolean setWifiApEnabled(boolean enabled) {
         try {
             if (enabled) { // disable WiFi in any case
-                mWifiManager.setWifiEnabled(false);
+                wifiManager.setWifiEnabled(false);
             }
-
-            Method method = mWifiManager.getClass().getMethod("setWifiApEnabled", WifiConfiguration.class, boolean.class);
-            return (Boolean) method.invoke(mWifiManager, wifiConfig, enabled);
+            Method method1 = wifiManager.getClass().getMethod("getWifiApConfiguration");
+            method1.setAccessible(true);
+            WifiConfiguration config = (WifiConfiguration) method1.invoke(wifiManager);
+            Method method2 = wifiManager.getClass().getMethod("setWifiApEnabled", WifiConfiguration.class, boolean.class);
+            return (Boolean) method2.invoke(wifiManager, config, enabled);
         } catch (Exception e) {
             Log.e(this.getClass().toString(), "", e);
             return false;
@@ -89,9 +90,9 @@ public class WifiApManager {
      */
     public WIFI_AP_STATE getWifiApState() {
         try {
-            Method method = mWifiManager.getClass().getMethod("getWifiApState");
+            Method method = wifiManager.getClass().getMethod("getWifiApState");
 
-            int tmp = ((Integer) method.invoke(mWifiManager));
+            int tmp = ((Integer) method.invoke(wifiManager));
 
             // Fix for Android 4
             if (tmp >= 10) {
@@ -123,8 +124,8 @@ public class WifiApManager {
      */
     public WifiConfiguration getWifiApConfiguration() {
         try {
-            Method method = mWifiManager.getClass().getMethod("getWifiApConfiguration");
-            return (WifiConfiguration) method.invoke(mWifiManager);
+            Method method = wifiManager.getClass().getMethod("getWifiApConfiguration");
+            return (WifiConfiguration) method.invoke(wifiManager);
         } catch (Exception e) {
             Log.e(this.getClass().toString(), "", e);
             return null;
@@ -138,8 +139,8 @@ public class WifiApManager {
      */
     public boolean setWifiApConfiguration(WifiConfiguration wifiConfig) {
         try {
-            Method method = mWifiManager.getClass().getMethod("setWifiApConfiguration", WifiConfiguration.class);
-            return (Boolean) method.invoke(mWifiManager, wifiConfig);
+            Method method = wifiManager.getClass().getMethod("setWifiApConfiguration", WifiConfiguration.class);
+            return (Boolean) method.invoke(wifiManager, wifiConfig);
         } catch (Exception e) {
             Log.e(this.getClass().toString(), "", e);
             return false;
