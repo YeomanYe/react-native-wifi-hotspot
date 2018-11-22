@@ -14,14 +14,7 @@
  * limitations under the License.
  */
 
-package info.whitebyte.hotspotmanager;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.net.InetAddress;
-import java.util.ArrayList;
+package reactnative.hotspot.hotspotmanager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +25,13 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.util.ArrayList;
 
 public class WifiApManager {
     private final WifiManager mWifiManager;
@@ -49,7 +49,7 @@ public class WifiApManager {
     public void showWritePermissionSettings(boolean force) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (force || !Settings.System.canWrite(this.context)) {
-                Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
                 intent.setData(Uri.parse("package:" + this.context.getPackageName()));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 this.context.startActivity(intent);

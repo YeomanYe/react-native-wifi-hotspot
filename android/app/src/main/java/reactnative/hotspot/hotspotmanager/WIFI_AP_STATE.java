@@ -1,9 +1,5 @@
-package info.whitebyte.hotspotmanager;
-
-import java.util.ArrayList;
-
 /*
- * Copyright 2014 Carlos Ferreyra.
+ * Copyright 2013 WhiteByte (Nick Russler, Ahmet Yueksektepe).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +14,8 @@ import java.util.ArrayList;
  * limitations under the License.
  */
 
+package reactnative.hotspot.hotspotmanager;
 
-public interface FinishScanListener {
-	/**
-	 * Interface called when the scan method finishes. Network operations should not execute on UI thread
-	 * @param clients
-	 */
-	public void onFinishScan(ArrayList<ClientScanResult> clients);
+public enum WIFI_AP_STATE {
+    WIFI_AP_STATE_DISABLING, WIFI_AP_STATE_DISABLED, WIFI_AP_STATE_ENABLING, WIFI_AP_STATE_ENABLED, WIFI_AP_STATE_FAILED
 }

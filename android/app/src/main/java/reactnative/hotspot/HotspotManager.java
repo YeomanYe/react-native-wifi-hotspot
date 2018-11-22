@@ -7,9 +7,9 @@ import com.facebook.react.bridge.ReadableMap;
 
 import java.util.ArrayList;
 
-import info.whitebyte.hotspotmanager.ClientScanResult;
-import info.whitebyte.hotspotmanager.FinishScanListener;
-import info.whitebyte.hotspotmanager.WifiApManager;
+import reactnative.hotspot.hotspotmanager.ClientScanResult;
+import reactnative.hotspot.hotspotmanager.FinishScanListener;
+import reactnative.hotspot.hotspotmanager.WifiApManager;
 
 public class HotspotManager {
     private WifiApManager wifi;

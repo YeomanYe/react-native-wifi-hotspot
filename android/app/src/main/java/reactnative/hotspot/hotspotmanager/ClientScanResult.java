@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package info.whitebyte.hotspotmanager;
+package reactnative.hotspot.hotspotmanager;
 
 public class ClientScanResult {
     private String IpAddr;
