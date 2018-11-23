@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
+import android.os.Build;
 import android.provider.Settings;
 
 import com.facebook.react.bridge.ReadableMap;
@@ -51,12 +52,14 @@ public class HotspotManager {
         }
     }
 
-    public void getPermission(Context context){
-        if (!Settings.System.canWrite(context)) {
-            Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
-            intent.setData(Uri.parse("package:" + context.getPackageName()));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+    public void getPermission(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.System.canWrite(context)) {
+                Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                intent.setData(Uri.parse("package:" + context.getPackageName()));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
         }
     }
 
@@ -114,8 +117,7 @@ public class HotspotManager {
                 }
             }
             config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-            config.allowedPairwiseCiphers
-                    .set(WifiConfiguration.PairwiseCipher.CCMP);
+            config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
             config.status = WifiConfiguration.Status.ENABLED;
             if (wifi.setWifiApConfiguration(config)) return true;
             else return false;
