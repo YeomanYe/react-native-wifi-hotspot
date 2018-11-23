@@ -1,6 +1,9 @@
 package reactnative.hotspot;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
+import android.provider.Settings;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -24,8 +27,10 @@ import reactnative.hotspot.hotspotmanager.ClientScanResult;
 public class HotspotModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
     private static String module = "Hotspot";
     private HotspotManager hotspot;
+    private ReactApplicationContext context;
     public HotspotModule(ReactApplicationContext reactContext) {
         super(reactContext);
+        context = reactContext;
         reactContext.addLifecycleEventListener(this);
         hotspot = new HotspotManager(reactContext);
     }
@@ -96,7 +101,7 @@ public class HotspotModule extends ReactContextBaseJavaModule implements Lifecyc
 
     @ReactMethod
     public void enable(Callback success, Callback error) {
-        if(hotspot.isEnabled()) {
+        if(hotspot.isEnabled(context)) {
             success.invoke();
         }
         else
@@ -105,7 +110,7 @@ public class HotspotModule extends ReactContextBaseJavaModule implements Lifecyc
 
     @ReactMethod
     public void disable(Callback success, Callback error) {
-        if(hotspot.isDisabled())
+        if(hotspot.isDisabled(context))
             success.invoke();
         else
             error.invoke("Hotspot already closed");

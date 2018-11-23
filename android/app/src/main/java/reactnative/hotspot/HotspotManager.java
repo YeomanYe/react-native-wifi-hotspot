@@ -1,7 +1,10 @@
 package reactnative.hotspot;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
+import android.provider.Settings;
 
 import com.facebook.react.bridge.ReadableMap;
 
@@ -28,21 +31,32 @@ public class HotspotManager {
         wifi.showWritePermissionSettings(false);
     }
 
-    public boolean isEnabled() {
+    public boolean isEnabled(Context c) {
         if (!wifi.isWifiApEnabled()) {
             wifi.setWifiApEnabled(true);
+            getPermission(c);
             return true;
         } else {
             return false;
         }
     }
 
-    public boolean isDisabled() {
+    public boolean isDisabled(Context c) {
         if (wifi.isWifiApEnabled()) {
+            getPermission(c);
             wifi.setWifiApEnabled(false);
             return true;
         } else {
             return false;
+        }
+    }
+
+    public void getPermission(Context context){
+        if (!Settings.System.canWrite(context)) {
+            Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+            intent.setData(Uri.parse("package:" + context.getPackageName()));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         }
     }
 
