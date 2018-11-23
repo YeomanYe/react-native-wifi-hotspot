@@ -66,7 +66,7 @@ public class WifiApManager {
      *
      * @return {@code true} if the operation succeeds, {@code false} otherwise
      */
-    public boolean setWifiApEnabled(boolean enabled) {
+    public Object setWifiApEnabled(boolean enabled) {
         try {
             if (enabled) { // disable WiFi in any case
                 wifiManager.setWifiEnabled(false);
@@ -78,7 +78,7 @@ public class WifiApManager {
             return (Boolean) method2.invoke(wifiManager, config, enabled);
         } catch (Exception e) {
             Log.e(this.getClass().toString(), "", e);
-            return false;
+            return e;
         }
     }
 

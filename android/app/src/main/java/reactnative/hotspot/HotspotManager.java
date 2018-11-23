@@ -32,7 +32,7 @@ public class HotspotManager {
         wifi.showWritePermissionSettings(false);
     }
 
-    public boolean isEnabled(Context c) {
+    public Object isEnabled(Context c) {
         /*if (!wifi.isWifiApEnabled()) {
             getPermission(c);
             wifi.setWifiApEnabled(true);
@@ -44,7 +44,7 @@ public class HotspotManager {
         return wifi.setWifiApEnabled(true);
     }
 
-    public boolean isDisabled(Context c) {
+    public Object isDisabled(Context c) {
         /*if (wifi.isWifiApEnabled()) {
             getPermission(c);
             wifi.setWifiApEnabled(false);

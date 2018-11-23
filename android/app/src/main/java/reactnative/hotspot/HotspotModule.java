@@ -101,19 +101,23 @@ public class HotspotModule extends ReactContextBaseJavaModule implements Lifecyc
 
     @ReactMethod
     public void enable(Callback success, Callback error) {
-        if(hotspot.isEnabled(context)) {
+        Object obj = hotspot.isEnabled(context);
+        success.invoke(obj);
+        /*if(hotspot.isEnabled(context)) {
             success.invoke();
         }
         else
-            error.invoke("Hotspot already running");
+            error.invoke("Hotspot already running");*/
     }
 
     @ReactMethod
     public void disable(Callback success, Callback error) {
-        if(hotspot.isDisabled(context))
+        Object obj = hotspot.isDisabled(context);
+        success.invoke(obj);
+        /*if(hotspot.isDisabled(context))
             success.invoke();
         else
-            error.invoke("Hotspot already closed");
+            error.invoke("Hotspot already closed");*/
     }
 
     @ReactMethod
