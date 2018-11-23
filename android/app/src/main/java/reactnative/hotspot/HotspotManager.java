@@ -33,23 +33,27 @@ public class HotspotManager {
     }
 
     public boolean isEnabled(Context c) {
-        if (!wifi.isWifiApEnabled()) {
-            wifi.setWifiApEnabled(true);
+        /*if (!wifi.isWifiApEnabled()) {
             getPermission(c);
+            wifi.setWifiApEnabled(true);
             return true;
         } else {
             return false;
-        }
+        }*/
+        getPermission(c);
+        return wifi.setWifiApEnabled(true);
     }
 
     public boolean isDisabled(Context c) {
-        if (wifi.isWifiApEnabled()) {
+        /*if (wifi.isWifiApEnabled()) {
             getPermission(c);
             wifi.setWifiApEnabled(false);
             return true;
         } else {
             return false;
-        }
+        }*/
+        getPermission(c);
+        return wifi.setWifiApEnabled(false);
     }
 
     public void getPermission(Context context) {
