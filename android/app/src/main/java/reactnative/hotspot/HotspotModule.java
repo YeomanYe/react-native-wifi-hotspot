@@ -1,9 +1,7 @@
 package reactnative.hotspot;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
-import android.provider.Settings;
+import android.os.Build;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
@@ -23,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import reactnative.hotspot.hotspotmanager.ClientScanResult;
+import reactnative.hotspot.oreo.MagicActivity;
 
 public class HotspotModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
     private static String module = "Hotspot";
@@ -101,23 +100,24 @@ public class HotspotModule extends ReactContextBaseJavaModule implements Lifecyc
 
     @ReactMethod
     public void enable(Callback success, Callback error) {
-        Object obj = hotspot.isEnabled(context);
-        success.invoke(obj);
-        /*if(hotspot.isEnabled(context)) {
-            success.invoke();
+        Object obj = null;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            MagicActivity.useMagicActivityToTurnOn(context);
+        }else{
+            obj = hotspot.isEnabled(context);
         }
-        else
-            error.invoke("Hotspot already running");*/
+        success.invoke(obj);
     }
 
     @ReactMethod
     public void disable(Callback success, Callback error) {
-        Object obj = hotspot.isDisabled(context);
+        Object obj = null;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            MagicActivity.useMagicActivityToTurnOff(context);
+        }else{
+            obj = hotspot.isDisabled(context);
+        }
         success.invoke(obj);
-        /*if(hotspot.isDisabled(context))
-            success.invoke();
-        else
-            error.invoke("Hotspot already closed");*/
     }
 
     @ReactMethod
