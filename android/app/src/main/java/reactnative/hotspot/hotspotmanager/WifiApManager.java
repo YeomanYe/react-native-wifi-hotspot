@@ -26,6 +26,8 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.facebook.react.bridge.Callback;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -66,7 +68,7 @@ public class WifiApManager {
      *
      * @return {@code true} if the operation succeeds, {@code false} otherwise
      */
-    public Object setWifiApEnabled(boolean enabled) {
+    public void setWifiApEnabled(boolean enabled, Callback suc, Callback err) {
         try {
             if (enabled) { // disable WiFi in any case
                 wifiManager.setWifiEnabled(false);
@@ -75,10 +77,11 @@ public class WifiApManager {
             method1.setAccessible(true);
             WifiConfiguration config = (WifiConfiguration) method1.invoke(wifiManager);
             Method method2 = wifiManager.getClass().getMethod("setWifiApEnabled", WifiConfiguration.class, boolean.class);
-            return (Boolean) method2.invoke(wifiManager, config, enabled);
+            method2.invoke(wifiManager, config, enabled);
+            suc.invoke();
         } catch (Exception e) {
             Log.e(this.getClass().toString(), "", e);
-            return e;
+            err.invoke(e);
         }
     }
 

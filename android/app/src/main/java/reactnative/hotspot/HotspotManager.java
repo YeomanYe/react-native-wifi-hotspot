@@ -7,6 +7,7 @@ import android.net.wifi.WifiConfiguration;
 import android.os.Build;
 import android.provider.Settings;
 
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReadableMap;
 
 import java.util.ArrayList;
@@ -32,14 +33,14 @@ public class HotspotManager {
         wifi.showWritePermissionSettings(false);
     }
 
-    public Object isEnabled(Context c) {
+    public void enable(Context c, Callback suc,Callback err){
         getPermission(c);
-        return wifi.setWifiApEnabled(true);
+        wifi.setWifiApEnabled(true,suc,err);
     }
 
-    public Object isDisabled(Context c) {
+    public void disable(Context c, Callback suc, Callback err){
         getPermission(c);
-        return wifi.setWifiApEnabled(false);
+        wifi.setWifiApEnabled(false,suc,err);
     }
 
     public void getPermission(Context context) {

@@ -102,22 +102,20 @@ public class HotspotModule extends ReactContextBaseJavaModule implements Lifecyc
     public void enable(Callback success, Callback error) {
         Object obj = null;
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            MagicActivity.useMagicActivityToTurnOn(context);
+            MagicActivity.turnOnWithCb(context,success);
         }else{
-            obj = hotspot.isEnabled(context);
+            hotspot.enable(context,success,error);
         }
-        success.invoke(obj);
     }
 
     @ReactMethod
     public void disable(Callback success, Callback error) {
         Object obj = null;
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            MagicActivity.useMagicActivityToTurnOff(context);
+            MagicActivity.turnOffWithCb(context,success);
         }else{
-            obj = hotspot.isDisabled(context);
+            hotspot.disable(context,success,error);
         }
-        success.invoke(obj);
     }
 
     @ReactMethod

@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.facebook.react.bridge.Callback;
+
 import reactnative.hotspot.R;
 
 public class MagicActivity extends PermissionsActivity {
@@ -24,6 +26,28 @@ public class MagicActivity extends PermissionsActivity {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(uri);
         c.startActivity(i);
+    }
+
+    public static void turnOnWithCb(Context c, Callback cb){
+        callback = cb;
+        useMagicActivityToTurnOn(c);
+    }
+
+    public static void turnOffWithCb(Context c,Callback cb){
+        callback = cb;
+        useMagicActivityToTurnOff(c);
+    }
+
+
+    private static Callback callback;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(callback != null){
+            callback.invoke();
+            callback = null;
+        }
     }
 
     private static final String TAG = MagicActivity.class.getSimpleName();
