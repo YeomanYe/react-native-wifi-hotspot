@@ -100,7 +100,6 @@ public class HotspotModule extends ReactContextBaseJavaModule implements Lifecyc
 
     @ReactMethod
     public void enable(Callback success, Callback error) {
-        Object obj = null;
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             MagicActivity.turnOnWithCb(context,success);
         }else{
@@ -110,7 +109,6 @@ public class HotspotModule extends ReactContextBaseJavaModule implements Lifecyc
 
     @ReactMethod
     public void disable(Callback success, Callback error) {
-        Object obj = null;
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             MagicActivity.turnOffWithCb(context,success);
         }else{
