@@ -31,11 +31,13 @@ public class MagicActivity extends PermissionsActivity {
     public static void turnOnWithCb(Context c, Callback cb){
         callback = cb;
         useMagicActivityToTurnOn(c);
+        cb.invoke();
     }
 
     public static void turnOffWithCb(Context c,Callback cb){
         callback = cb;
         useMagicActivityToTurnOff(c);
+        cb.invoke();
     }
 
 
